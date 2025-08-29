@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>USM Lost and Found</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="static/images/usmlogo.png" alt="Logo">
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="back">
+            <a href="{{ url_for('home') }}">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <span class="back-text">BACK</span>
+            </a>
+        </div>
+    
+        <section class="form-sections">  
+            <div class="form-container found">
+                <h1>FOUND SECTION</h1>
+                <form action="/submit_found" method="POST" enctype="multipart/form-data" onsubmit="return validateFormFound(event)">
+                    <label for="found-item">FOUND ITEM <span>*</span></label>
+                    <input type="text" id="found-item" name="item" placeholder="Enter Item">
+        
+                    <label for="found-location">LOCATION <span>*</span></label>
+                    <input type="text" id="found-location" name="location" placeholder="Enter Location">
+        
+                    <label for="found-description">DESCRIPTION <span>*</span></label>
+                    <input type="text" id="found-description" name="description" placeholder="Enter Description">
+        
+                    <label for="found-date">DATE <span>*</span></label>
+                    <input type="date" id="found-date" name="date">
+        
+                    <label for="found-ID">STUDENT ID (Enter Name if NON-STUDENT) <span>*</span></label>
+                    <input type="text" id="found-ID" name="student_id" placeholder="Enter Student ID">
+        
+                    <label for="found-contact">CONTACT (Email) <span>*</span></label>
+                    <input type="text" id="found-contact" name="contact" placeholder="Enter Contact">
+        
+                    <label for="found-photo">PHOTO <span>*</span></label>
+                    <div class="photo-upload-box">
+                        <input type="file" id="found-photo" name="photo" accept="image/*" hidden>
+                        <label for="found-photo" id="photo-label" class="photo-placeholder">ATTACH FILE<br>HERE</label>
+                        <img id="preview-image" src="#" alt="Image Preview" style="display:none; cursor: pointer; max-width: 200px; max-height: 200px; margin-bottom: 10px;" onclick="enlargeImage(this)">
+                    </div>
+                    
+                    <button type="submit" class="submit-found">SUBMIT FOUND ITEM</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p>Are you sure you want to Submit this as a Found Item?</p>
+            <div class="modal-buttons">
+                <button id="go-back-btn">BACK</button>
+                <button id="confirm-submit-btn">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            document.getElementById('found-item').value = params.get('item') || '';
+            document.getElementById('found-location').value = params.get('location') || '';
+        });
+    </script>
+
+    <script>
+        document.getElementById('found-photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview-image');
+        
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function enlargeImage(img) {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '1000';
+        
+            const largeImg = document.createElement('img');
+            largeImg.src = img.src;
+            largeImg.style.maxWidth = '90%';
+            largeImg.style.maxHeight = '90%';
+            largeImg.style.borderRadius = '8px';
+        
+            overlay.appendChild(largeImg);
+            overlay.addEventListener('click', () => document.body.removeChild(overlay));
+            document.body.appendChild(overlay);
+        }
+    </script>
+
+    <script>
+        function validateFormFound(event) {
+            event.preventDefault();
+            const requiredFields = [
+                'found-item',
+                'found-location',
+                'found-description',
+                'found-date',
+                'found-ID',
+                'found-contact',
+                'found-photo'
+            ];
+
+            let formIsValid = true;
+            requiredFields.forEach(id => {
+                const input = document.getElementById(id);
+                const isFileInput = input.type === 'file';
+                const value = isFileInput ? input.files.length : input.value.trim();
+
+                if (!value) {
+                    input.style.boxShadow = '0 0 0 1px red';
+                    formIsValid = false;
+                } else {
+                    input.style.boxShadow = 'none';
+                }
+            });
+
+            if (formIsValid) {
+                document.getElementById('confirmation-modal').style.display = 'flex';
+            }
+
+            return false;
+        }
+
+        document.getElementById('go-back-btn').addEventListener('click', () => {
+            document.getElementById('confirmation-modal').style.display = 'none';
+        });
+
+        document.getElementById('confirm-submit-btn').addEventListener('click', () => {
+            document.querySelector('form').submit();
+        });
+    </script>
+
+</body>
+</html>

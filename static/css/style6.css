@@ -1,0 +1,430 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Righteous&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    color: #EBEBEB;
+}
+
+h1 {
+    font-weight: lighter;
+    letter-spacing: 1px;
+    padding-top: 15px;
+    font-size: 80px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    color: #004d28;
+}
+
+nav {
+    background-color: #FFF;
+    position: sticky;
+    top: 0;
+    padding: 0 85px;
+    display: flex;
+    align-items: center;
+    height: 120px;
+    box-shadow: 0 5px 80px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+nav .logo img {
+    width: 350px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.search-wrapper {
+    position: relative;
+    margin-left: 500px;
+    flex-grow: 1;
+    max-width: 800px;
+}
+
+.search-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background-color: #2e7d1f;
+    border-radius: 50px;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+nav .logo-usm {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-100%, 10%);
+    z-index: 5;
+}
+
+nav .logo-usm img {
+    width: 100px;
+    height: auto;
+}
+
+.main-container {
+    position: relative;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    padding-top: 15px;
+}
+
+.page-title {
+    text-align: center;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    padding-top: 0px;
+    font-size: 80px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: #004d28;
+    margin-top: -60px;
+}
+
+.back {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.back a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.back i {
+    font-size: 40px;
+    color: #194D08;
+    margin: 0;
+}
+
+.back-text {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 40px;
+    color: #194D08;
+}
+
+.form-container {
+    flex: 1;
+    padding: 40px 30px;
+    padding-top: 15px;
+    padding-bottom: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.photo-name {
+    display: flex;
+    padding-top: 20px;
+}
+
+.photo-name img {
+    padding-left: 5%;
+}
+
+.photo-name p {
+    padding-top: 10%;
+    padding-left: 30px;
+    color: #194D08;
+    font-size: 30px;
+}
+
+.details {
+    padding-left: 5%;
+    color: #194D08;
+    font-size: 20px;
+}
+
+.details p {
+    padding-bottom: 10px;
+}
+
+.details span {
+    display: inline-block;
+    width: 90%;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 30px;
+    border: 1px solid #444;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+/* for users */
+.markasretrieved {
+    background-color: #194D08;
+    color: white;
+    width: 30%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 2px 4px 0px rgba(0,0,0,0.3);
+    display: block;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.markasfound {
+    background-color: white;
+    color: #194D08;
+    width: 30%;
+    padding: 10px;
+    font-size: 14px;
+    border-color: #194D08;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 2px 4px 0px rgba(0,0,0,0.3);
+    display: block;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+/* modal for edit and delete */
+/* for admin */
+.modal1 {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content1 {
+    background-color: #fff;
+    margin: 6% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 50%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    max-height: 90vh;     
+    overflow-y: auto;    
+}
+
+.modal-content2 {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 35px;
+    border-radius: 15px;
+    width: 35%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.modal-icon1 {
+    font-size: 100px;
+    color: #004d28;
+    margin-bottom: 20px;
+}
+
+.modal-content1 h2 {
+    color: #004d28;
+    font-size: 70px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: lighter;
+    padding-bottom: 20px;
+}
+
+.modal-content1 input,
+.modal-content1 textarea {
+    width: 90%;
+    margin: 0 auto 20px auto;
+    padding: 15px 20px;
+    font-size: 16px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px #ccc;
+    display: block;
+}
+
+.modal-content1 label {
+    font-weight: bold;
+    color: #004d28;
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    margin-left: 5%;
+}
+
+.modal-content2 p {
+    font-weight: bold;
+    color: #004d28;
+    text-align: center;
+}
+
+.modal-buttons1 {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.edit-btn1,
+.delete-btn1,
+.delete-btn2,
+.go-back-btn1 {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 150px;
+    box-shadow: 2px 4px 0px rgba(0,0,0,0.3);
+}
+
+.edit-btn1 {
+    margin-right: 15px;
+    width: 300px;
+    background-color: #004d28;
+    color: white;
+    border: 1px solid #004d28;
+}
+
+.delete-btn1 {
+    width: 300px;
+    background-color: white;
+    color: #004d28;
+    border: 1px solid #004d28;
+}
+
+.delete-btn2 {
+    background-color: #004d28;
+    color: white;
+}
+
+.go-back-btn1 {
+    background-color: white;
+    color: #004d28;
+    border: 1px solid #004d28;
+}
+
+/* modal for retrieve */
+/* user */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+.modal h2 {
+    font-size: 60px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: lighter;
+}
+
+.modal h4 {
+    padding-bottom: 30px;
+}
+
+.modal label {
+    padding-right: 70%;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 300px;
+    max-width: 700px;
+    width: 90%;
+    color: #194D08;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content input[type="text"] {
+    width: 95%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+}
+
+.modal-icon i {
+    font-size: 50px;
+    color: green;
+    margin-bottom: 15px;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 45%;
+    box-shadow: 2px 2px 4px #00000033;
+}
+
+#go-back-btn {
+    background-color: white;
+    color: #1b4d11;
+}
+
+#confirm-submit-btn {
+    background-color: #1b4d11;
+    color: white;
+}
+
+#go-back-btn:hover {
+    background-color: #f2f2f2;
+}
+
+#confirm-submit-btn:hover {
+    background-color: #133c08;
+}

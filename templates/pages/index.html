@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>USM Lost and Found</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="static/images/usmlogo.png" alt="Logo">
+        </div>
+        <div class="triangle-dev">
+            <img src="static/images/triangle.png" alt="Design">
+        </div>
+    </nav>
+
+    <div class="banner">
+        <img src="static/images/banner.svg" alt="Banner">
+    </div>
+
+    <h1>LOST AND FOUND SYSTEM</h1>
+
+    <section class="form-sections">
+        <div class="form-container lost">
+            <h2>LOST Section</h2>
+            <form onsubmit="return validateFormLost(event)">
+                <label for="lost-item">LOST ITEM <span>*</span></label>
+                <input type="text" id="lost-item" name="lostItem" placeholder="Enter Item">
+    
+                <label for="lost-location">LOCATION <span>*</span></label>
+                <input type="text" id="lost-location" name="lostLocation" placeholder="Location">
+    
+                <button type="submit" class="submit-lost">SUBMIT LOST ITEM</button>
+            </form>
+        </div>
+        <div class="form-container found">
+            <h2>FOUND Section</h2>
+            <form onsubmit="return validateFormFound(event)">
+                <label for="found-item">FOUND ITEM <span>*</span></label>
+                <input type="text" id="found-item" name="foundItem" placeholder="Enter Item">
+    
+                <label for="found-location">LOCATION <span>*</span></label>
+                <input type="text" id="found-location" name="foundLocation" placeholder="Enter Location">
+    
+                <button type="submit" class="submit-found">SUBMIT FOUND ITEM</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="quote">
+        <p>"Honesty is the first <br> chapter in the book of <br> <span> wisdom.</span>"</p>
+        <h6>- Thomas Jefferson</h6>
+    </div>
+
+    <div class="tutorial">
+        <h2>STEP-BY-STEP PROCESS:</h2>
+        <h3>
+            • Search for the Item in the Lost or Found Pages below (VIEW ALL LOST ITEMS/VIEW ALL FOUND ITEMS) <br>
+            • IF NOT: Enter the Lost OR Found Item Details above (it will redirect to another page asking for more info) <br>
+            • IF FOUND: Leave the Item at the Office of Student Affairs <br>
+            • IF LOST: Wait for an email notifying that someone already found your Item <br>
+        </h3>
+    </div>
+
+    <div class="recent-container">
+        <div class="item-row">
+            <div class="item-label">RECENT <br> <span>LOST</span> <br> ITEM</div>
+            <div class="item-content">
+                {% if latest_lost %}
+                <p><strong>ITEM:</strong> {{ latest_lost[1] }}</p>
+                <p><strong>LOCATION:</strong> {{ latest_lost[2] }}</p>
+                <p><strong>DESCRIPTION:</strong> {{ latest_lost[3] }}</p>
+                <p><strong>DATE:</strong> {{ latest_lost[4] }}</p>
+                <p><strong>REPORTED BY:</strong> {{ latest_lost[5] }}</p>
+                <a href="{{ url_for('view_lost_item', lost_id=latest_lost[0]) }}" class="view-link">View Lost Item</a>
+                {% endif %}
+            </div>
+            <div class="item-link">
+                <a href="{{ url_for('recentlost') }}">VIEW ALL LOST ITEMS<i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    
+        <div class="item-row">
+            <div class="item-label">RECENT <span>FOUND</span> ITEM</div>
+            <div class="item-content">
+                {% if latest_found %}
+                <p><strong>ITEM:</strong> {{ latest_found[1] }}</p>
+                <p><strong>LOCATION:</strong> {{ latest_found[2] }}</p>
+                <p><strong>DESCRIPTION:</strong> {{ latest_found[3] }}</p>
+                <p><strong>DATE:</strong> {{ latest_found[4] }}</p>
+                <p><strong>FOUND BY:</strong> {{ latest_found[5] }}</p>
+                <a href="{{ url_for('view_found_item', found_id=latest_found[0]) }}" class="view-link">View Found Item</a>
+                {% endif %}
+            </div>
+            <div class="item-link">
+                <a href="{{ url_for('recentfound') }}">VIEW ALL FOUND ITEMS<i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateFormLost(event) {
+            event.preventDefault();
+    
+            const itemInput = document.getElementById('lost-item');
+            const locationInput = document.getElementById('lost-location');
+    
+            itemInput.style.borderColor = '#ccc';
+            locationInput.style.borderColor = '#ccc';
+    
+            if (itemInput.value.trim() === '') {
+                itemInput.style.borderColor = 'red';
+            }
+    
+            if (locationInput.value.trim() === '') {
+                locationInput.style.borderColor = 'red';
+            }
+    
+            if (itemInput.value.trim() === '' || locationInput.value.trim() === '') {
+                return false;
+            }
+    
+            const item = encodeURIComponent(itemInput.value.trim());
+            const location = encodeURIComponent(locationInput.value.trim());
+            window.location.href = `/lost?item=${item}&location=${location}`;
+        }
+
+        function validateFormFound(event) {
+            event.preventDefault();
+
+            const itemInput = document.getElementById('found-item');
+            const locationInput = document.getElementById('found-location');
+            
+            itemInput.style.borderColor = '#ccc';
+            locationInput.style.borderColor = '#ccc';
+    
+            if (itemInput.value.trim() === '') {
+                itemInput.style.borderColor = 'red';
+            }
+    
+            if (locationInput.value.trim() === '') {
+                locationInput.style.borderColor = 'red';
+            }
+    
+            if (itemInput.value.trim() === '' || locationInput.value.trim() === '') {
+                return false;
+            }
+    
+            const item = encodeURIComponent(itemInput.value.trim());
+            const location = encodeURIComponent(locationInput.value.trim());
+            window.location.href = `/found?item=${item}&location=${location}`;
+        }
+    </script>
+
+</body>
+</html>

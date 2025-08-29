@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Righteous&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    color: #EBEBEB;
+}
+
+h1 {
+    font-weight: lighter;
+    letter-spacing: 1px;
+    padding-top: 15px;
+    font-size: 60px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-align: center;
+    color: #004d28;
+}
+
+nav {
+    background-color: #FFF;
+    position: sticky;
+    top: 0;
+    padding: 0 85px;
+    display: flex;
+    align-items: center;
+    height: 120px;
+    box-shadow: 0 5px 80px rgba(0, 0, 0, 0.7);
+}
+
+nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+nav .logo img {
+    width: 350px;
+    height: 100px;
+    object-fit: contain;
+}
+
+nav .logo-usm {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-3%, 10%);
+    z-index: 5;
+}
+
+nav .logo-usm img {
+    width: 250px;
+    height: auto;
+}
+
+nav .triangle-dev {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(0%, -20%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+nav .triangle-dev img {
+    width: 850px;
+    height: auto;
+}
+
+.banner img {
+    width: 100%;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow below the image */
+
+}
+
+.form-sections {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px 20px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.form-container {
+    flex: 1;
+    padding: 40px 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.form-container.lost {
+    background-color: white;
+    color: #194D08;
+}
+
+.form-container.found {
+    background-color: #194D08;
+    color: white;
+}
+
+.form-container h2 {
+    text-align: center;
+    font-weight: normal;
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.form-container label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.form-container span {
+    color: red;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.submit-lost, .submit-found {
+    width: 30%;
+    padding: 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 2px 4px 0px rgba(0,0,0,0.1);
+    display: block;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+.submit-lost {
+    background-color: #194D08;
+    color: white;
+}
+
+.submit-lost:hover {
+    background-color: #2e8311;
+    color: white;
+}
+
+.submit-found {
+    background-color: white;
+    color: #194D08;
+}
+
+.submit-found:hover {
+    background-color: #2e8311;;
+    color: white;
+}
+
+.quote {
+    color: #194D08;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 50px;
+    font-size: 30px;
+}
+
+.quote p {
+    font-style: italic;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.quote span {
+    color: rgb(150, 150, 7);
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+.quote h6 {
+    padding-top: 15px;
+    padding-left: 300px;
+}
+
+.tutorial {
+    justify-content: flex-start;
+    color: #004d28;
+    padding-bottom: 60px;
+}
+
+.tutorial h2 {
+    padding-left: 255px;
+    font-weight: 400;
+    font-family: Impact;
+    font-size: 40px;
+    padding-bottom: 5px;
+}
+
+.tutorial h3 {
+    padding-left: 305px;
+    font-weight: 400;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 25px;
+}
+
+.recent-container {
+    background-color: #004d26;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+}
+
+.item-row {
+    display: flex;
+    align-items: center;
+    background-color: #EBEBEB;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.item-label {
+    flex: 1;
+    font-weight: bold;
+    font-size: 90px;
+    text-align: center;
+    line-height: 50px;
+    color: #004d26;
+    letter-spacing: -5px;
+    padding-left: 50px;
+}
+
+.item-label span{
+    flex: 1;
+    font-weight: bold;
+    font-size: 100px;
+    text-align: center;
+    line-height: 50px;
+    color: rgb(184, 184, 8);
+    letter-spacing: 1px;
+}
+
+.item-content {
+    width: 700px;
+    background-color: white;
+    padding: 15px;
+    margin: 0 20px;
+    border-radius: 8px;
+    min-height: 120px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.item-content p {
+    margin: 4px 0;
+    color: #004d26;
+}
+
+.view-link {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    color: #2e7d1f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.view-link:hover {
+    text-decoration: underline;
+}
+
+.item-link {
+    flex: 1;
+    padding-left: 10px;
+}
+
+.item-link a {
+    font-weight: lighter;
+    color: #004d26;
+    text-decoration: none;
+    font-size: 30px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}

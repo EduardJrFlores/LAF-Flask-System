@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style6.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>View Item</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="{{ url_for('static', filename='images/usmlogo.png') }}" alt="Logo">
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="back">
+            <a href="{{ url_for('waitingapproval') }}">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <span class="back-text">ALL PENDING APPROVALS</span>
+            </a>
+        </div>
+
+        <h1 class="page-title">ITEM DETAILS</h1>
+        <br>
+        <div class="form-container">
+            <div class="photo-name">
+                <img src="{{ url_for('static', filename=approval_item['photo']) }}" alt="Item Photo"
+                    alt="Found Item Photo"
+                    style="max-width:450px; height:400px; cursor:pointer;"
+                    onclick="enlargeImage(this)">
+                <p><strong>ITEM:</strong> {{ approval_item.item }}</p>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="details">
+                <p><strong>Description:</strong><br><span> {{ approval_item.description }} </span></p> 
+                <p><strong>DATE:</strong><br><span> {{ approval_item.date.strftime('%Y-%m-%d') }} </span></p>
+                <p><strong>Location:</strong><br><span> {{ approval_item.location }} </span></p>
+                <p><strong>Found By:</strong><br><span> {{ approval_item.student_id }} </span></p>
+                <p><strong>Requested By:</strong><br><span> {{ approval_item.requested_by }} </span></p>
+                <p><strong>Contact:</strong><br><span> {{ approval_item.contact }} </span></p>
+                <p><strong>Status:</strong><br><span style="border-color: rgb(217, 255, 0);"> {{ approval_item.status }} </span></p>
+            </div>
+            <div class="action-buttons1" style="text-align: center;">
+                <button onclick="openRejectModal()" class="edit-btn1">REJECT</button>
+                <button onclick="openApproveModal()" class="delete-btn1">APPROVE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal structure -->
+    <div id="reject-modal1" class="modal1" style="display:none;">
+        <div class="modal-content2">
+            <div class="modal-icon1">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <p>Are you sure you want to REJECT this Request?</p>
+            <div class="modal-buttons1">
+                <button class="go-back-btn1" onclick="closeRejectModal()">BACK</button>
+                <form method="POST" action="{{ url_for('reject_approval_item', approval_id=approval_id) }}" style="display:inline;">
+                    <button type="submit" class="delete-btn2">REJECT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="approve-modal1" class="modal1">
+        <div class="modal-content2">
+            <div class="modal-icon1">
+                <i class="fa fa-check-circle"></i>
+            </div>
+            <p>Are you sure you want to <strong>APPROVE</strong> this claim request?</p>
+            <div class="modal-buttons1">
+                <button class="go-back-btn1" onclick="closeApproveModal()">BACK</button>
+                <form method="POST" action="{{ url_for('approve_approval_item', approval_id=approval_id) }}" style="display:inline;">
+                    <button type="submit" class="delete-btn2">APPROVE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+            function enlargeImage(img) {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '1000';
+            overlay.style.cursor = 'zoom-out';
+
+            const largeImg = document.createElement('img');
+            largeImg.src = img.src;
+            largeImg.style.maxWidth = '90%';
+            largeImg.style.maxHeight = '90%';
+            largeImg.style.borderRadius = '8px';
+            largeImg.style.boxShadow = '0 0 15px rgba(0,0,0,0.2)';
+
+            overlay.appendChild(largeImg);
+
+            overlay.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+
+            document.body.appendChild(overlay);
+        }
+    </script>
+
+    <script>
+        function openRejectModal() {
+            document.getElementById('reject-modal1').style.display = 'block';
+        }
+
+        function closeRejectModal() {
+            document.getElementById('reject-modal1').style.display = 'none';
+        }
+        function openApproveModal() {
+            document.getElementById('approve-modal1').style.display = 'block';
+        }
+        function closeApproveModal() {
+            document.getElementById('approve-modal1').style.display = 'none';
+        }
+    </script>
+</body>
+</html>        

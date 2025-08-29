@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style6.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>View Item</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="{{ url_for('static', filename='images/usmlogo.png') }}" alt="Logo">
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="back">
+            <a href="{{ url_for('recentfound') }}">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <span class="back-text">ALL FOUND ITEMS</span>
+            </a>
+        </div>
+    
+        <h1 class="page-title">ITEM DETAILS</h1>
+        <br>
+        <div class="form-container">
+            <div class="photo-name">
+                <img src="{{ url_for('static', filename=found_item.photo) }}"
+                    alt="Found Item Photo"
+                    style="max-width:450px; height:400px; cursor:pointer;"
+                    onclick="enlargeImage(this)">
+                <p><strong>ITEM:</strong> {{ found_item.item }} </p> 
+            </div>s
+
+            <br>
+            <br>
+
+            <div class="details">
+                <p><strong>Description:</strong><br><span> {{ found_item.description }} </span></p> 
+                <p><strong>Date Found:</strong><br><span> {{ found_item.date }} </span></p>
+                <p><strong>Location:</strong><br><span> {{ found_item.location }} </span></p>
+                <p><strong>Found By:</strong><br><span> {{ found_item.student_id }} </span></p>
+                <p><strong>Contact:</strong><br><span> {{ found_item.contact }} </span></p>
+                <p><strong>Status:</strong><br><span style="border-color: rgb(43, 228, 53);"> {{ found_item.status }} </span></p> 
+            </div>
+            <div class="action-buttons1" style="text-align: center;">
+                <button onclick="openEditModal()" class="edit-btn1">EDIT</button>
+                <button onclick="openDeleteModal()" class="delete-btn1">DELETE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-modal1" class="modal1">
+        <div class="modal-content2">
+            <div class="modal-icon1">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <p>Are you sure you want to Delete this as a Lost Item?</p>
+            <div class="modal-buttons1">
+                <button class="go-back-btn1" onclick="closeDeleteModal()">BACK</button>
+                <form method="POST" action="{{ url_for('delete_found_item', found_id=found_id) }}" style="display:inline;">
+                    <button type="submit" class="delete-btn2">DELETE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-modal1" class="modal1">
+        <div class="modal-content1">
+            <h2>EDIT ITEM</h2>
+            <form method="POST" action="{{ url_for('edit_found_item', found_id=found_id) }}">
+                <label>ITEM NAME:</label>
+                <input type="text" name="item" value="{{ found_item.item }}" required>
+
+                <label>DESCRIPTION:</label>
+                <textarea name="description" required>{{ found_item.description }}</textarea>
+
+                <label>DATE:</label>
+                <input type="date" name="date" value="{{ found_item.date }}" required>
+
+                <div class="modal-buttons1">
+                    <button type="button" class="go-back-btn1" onclick="closeEditModal()">CANCEL</button>
+                    <button type="submit" class="edit-btn1">SAVE CHANGES</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('found-photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview-image');
+        
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function enlargeImage(img) {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '1000';
+        
+            const largeImg = document.createElement('img');
+            largeImg.src = img.src;
+            largeImg.style.maxWidth = '90%';
+            largeImg.style.maxHeight = '90%';
+            largeImg.style.borderRadius = '8px';
+        
+            overlay.appendChild(largeImg);
+            overlay.addEventListener('click', () => document.body.removeChild(overlay));
+            document.body.appendChild(overlay);
+        }
+    </script>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('delete-modal1').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal1').style.display = 'none';
+        }
+
+        function openEditModal() {
+            document.getElementById('edit-modal1').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal1').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

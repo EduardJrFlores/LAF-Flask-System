@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css') }}">
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>USM Lost and Found</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="static/images/usmlogo.png" alt="Logo">
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <div class="back">
+            <a href="{{ url_for('home') }}">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <span class="back-text">BACK</span>
+            </a>
+        </div>
+    
+        <section class="form-sections">  
+            <div class="form-container lost">
+            <h1>LOST SECTION</h1>
+                <form action="/submit_lost" method="POST" enctype="multipart/form-data" onsubmit="return validateFormFound(event)">
+                    <label for="lost-item">LOST ITEM <span>*</span></label>
+                    <input type="text" id="lost-item" name="item" placeholder="Enter Item">
+        
+                    <label for="lost-location">LOCATION <span>*</span></label>
+                    <input type="text" id="lost-location" name="location" placeholder="Enter Location">
+        
+                    <label for="lost-description">DESCRIPTION <span>*</span></label>
+                    <input type="text" id="lost-description" name="description" placeholder="Enter Description">
+        
+                    <label for="lost-date">DATE <span>*</span></label>
+                    <input type="date" id="lost-date" name="date">
+        
+                    <label for="lost-ID">STUDENT ID (Enter Name if NON-STUDENT) <span>*</span></label>
+                    <input type="text" id="lost-ID" name="student_id" placeholder="Enter Student ID">
+        
+                    <label for="lost-contact">CONTACT (Email) <span>*</span></label>
+                    <input type="text" id="lost-contact" name="contact" placeholder="Enter Contact">
+        
+                    <label for="lost-photo">PHOTO <span>*</span></label>
+                    <div class="photo-upload-box">
+                        <input type="file" id="lost-photo" name="photo" accept="image/*" hidden>
+                        <label for="lost-photo" id="photo-label" class="photo-placeholder">ATTACH FILE<br>HERE</label>
+                        <img id="preview-image" src="#" alt="Image Preview" style="display:none; cursor: pointer; max-width: 300px; max-height: 300px; margin-bottom: 10px;" onclick="enlargeImage(this)">
+                    </div>
+                    
+                    <button type="submit" class="submit-lost">SUBMIT LOST ITEM</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p>Are you sure you want to Submit this as a Lost Item?</p>
+            <div class="modal-buttons">
+                <button id="go-back-btn">BACK</button>
+                <button id="confirm-submit-btn">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            document.getElementById('lost-item').value = params.get('item') || '';
+            document.getElementById('lost-location').value = params.get('location') || '';
+        });
+    </script>
+
+    <script>
+        document.getElementById('lost-photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview-image');
+    
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    
+        function enlargeImage(img) {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '1000';
+        
+            const largeImg = document.createElement('img');
+            largeImg.src = img.src;
+            largeImg.style.maxWidth = '90%';
+            largeImg.style.maxHeight = '90%';
+            largeImg.style.borderRadius = '8px';
+        
+            overlay.appendChild(largeImg);
+            overlay.addEventListener('click', () => document.body.removeChild(overlay));
+            document.body.appendChild(overlay);
+        }
+    </script>
+
+    <script>
+        function validateFormFound(event) {
+            event.preventDefault();
+            const requiredFields = [
+                'lost-item',
+                'lost-location',
+                'lost-description',
+                'lost-date',
+                'lost-ID',
+                'lost-contact',
+                'lost-photo'
+            ];
+
+            let formIsValid = true;
+            requiredFields.forEach(id => {
+                const input = document.getElementById(id);
+                const isFileInput = input.type === 'file';
+                const value = isFileInput ? input.files.length : input.value.trim();
+
+                if (!value) {
+                    input.style.boxShadow = '0 0 0 1px red';
+                    formIsValid = false;
+                } else {
+                    input.style.boxShadow = 'none';
+                }
+            });
+
+            if (formIsValid) {
+                document.getElementById('confirmation-modal').style.display = 'flex';
+            }
+
+            return false;
+        }
+
+        document.getElementById('go-back-btn').addEventListener('click', () => {
+            document.getElementById('confirmation-modal').style.display = 'none';
+        });
+
+        document.getElementById('confirm-submit-btn').addEventListener('click', () => {
+            document.querySelector('form').submit();
+        });
+    </script>
+
+</body>
+</html>

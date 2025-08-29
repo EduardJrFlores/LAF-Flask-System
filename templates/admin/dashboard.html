@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboard.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Dashboard</title>
+  </head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </div>
+        <div class="logout">
+            <a href="{{ url_for('logout') }}">
+                <p>LOGOUT</p>
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="{{ url_for('static', filename='images/usmlogo.png') }}" alt="Logo">
+        </div>
+    </nav>
+
+    <div class="dashboard-wrapper">
+        <div class="header">
+            <h2>ADMIN DASHBOARD</h2>
+        </div>
+
+        <div class="main-container">
+            <div class="stats-container">
+                <div class="stat-box">
+                    <p style="color: darkgreen;"><span style="color: red;">●</span> LOST ITEMS</p>
+                    <h1 style="color: darkgreen;">{{ lost_count }}</h1>
+                </div>
+                <div class="stat-box">
+                    <p style="color: darkgreen;"><span style="color: orange;">●</span> FOUND ITEMS</p>
+                    <h1 style="color: darkgreen;">{{ found_count }}</h1>
+                </div>
+                <div class="stat-box">
+                    <p style="color: darkgreen;"><span style="color: green;">●</span> FOR APPROVAL</p>
+                    <h1 style="color: darkgreen;">{{ approval_count }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-table">
+            <h2 class="section-title">Requests for Approval</h2>
+
+            <!-- Table headers -->
+            <div class="table-row table-header">
+                <div class="cell id">Approval ID</div>
+                <div class="cell item">Item</div>
+                <div class="cell description">Description</div>
+                <div class="cell date">Date and Time</div>
+                <div class="cell student">Found By</div>
+                <div class="cell student">Requested By</div>
+                <div class="cell status">STATUS</div>            
+                <div class="cell action">Action</div>
+            </div>
+
+            {% if approval_items %}
+                {% for approval in approval_items %}
+                <div class="table-row">
+                    <div class="cell id">#{{ approval[0] }}</div>
+                    <div class="cell item">{{ approval[1] }}</div>
+                    <div class="cell description">{{ approval[2] }}</div>
+                    <div class="cell date">{{ approval[3].strftime('%Y-%m-%d') }}</div>
+                    <div class="cell student">{{ approval[4] }}</div>
+                    <div class="cell student">{{ approval[5] }}</div>
+                    <div class="cell status"><span>{{ approval[6] }}</span></div>               
+                    <div class="cell action">
+                        <a href="{{ url_for('view_approval_item', approval_id=approval[0]) }}" class="btn">View Item</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="table-row">
+                    <div class="cell full" colspan="8">No approval requests found.</div>
+                </div>
+            {% endif %}
+
+            <div class="view-all">
+                <a href="{{ url_for('waitingapproval') }}" class="view-all-link">View All Requests</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-container">
+        <div class="item-row">
+            <div class="item-label">RECENT <br> <span>LOST</span> <br> ITEM</div>
+            <div class="item-content">
+                {% if latest_lost %}
+                <p><strong>ITEM:</strong> {{ latest_lost[1] }}</p>
+                <p><strong>LOCATION:</strong> {{ latest_lost[2] }}</p>
+                <p><strong>DESCRIPTION:</strong> {{ latest_lost[3] }}</p>
+                <p><strong>DATE:</strong> {{ latest_lost[4] }}</p>
+                <p><strong>REPORTED BY:</strong> {{ latest_lost[5] }}</p>
+                <a href="{{ url_for('view_lost_item', lost_id=latest_lost[0]) }}" class="view-link">View Lost Item</a>
+                {% endif %}
+            </div>
+            <div class="item-link">
+                <a href="{{ url_for('recentlost') }}">VIEW ALL LOST ITEMS<i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    
+        <div class="item-row">
+            <div class="item-label">RECENT <br> <span>FOUND</span> <br> ITEM</div>
+            <div class="item-content">
+                {% if latest_found %}
+                <p><strong>ITEM:</strong> {{ latest_found[1] }}</p>
+                <p><strong>LOCATION:</strong> {{ latest_found[2] }}</p>
+                <p><strong>DESCRIPTION:</strong> {{ latest_found[3] }}</p>
+                <p><strong>DATE:</strong> {{ latest_found[4] }}</p>
+                <p><strong>FOUND BY:</strong> {{ latest_found[5] }}</p>
+                <a href="{{ url_for('view_found_item', found_id=latest_found[0]) }}" class="view-link">View Found Item</a>
+                {% endif %}
+            </div>
+            <div class="item-link">
+                <a href="{{ url_for('recentfound') }}">VIEW ALL FOUND ITEMS<i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

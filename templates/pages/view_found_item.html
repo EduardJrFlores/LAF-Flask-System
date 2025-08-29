@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style6.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>View Item</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="logo-usm">
+            <img src="{{ url_for('static', filename='images/usmlogo.png') }}" alt="Logo">
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="back">
+            <a href="{{ url_for('recentfound') }}">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <span class="back-text">ALL FOUND ITEMS</span>
+            </a>
+        </div>
+    
+        <h1 class="page-title">ITEM DETAILS</h1>
+        <br>
+        <div class="form-container">
+            <div class="photo-name">
+                <img src="{{ url_for('static', filename=found_item.photo) }}"
+                    alt="Found Item Photo"
+                    style="max-width:450px; height:400px; cursor:pointer;"
+                    onclick="enlargeImage(this)">
+                <p><strong>ITEM:</strong> {{ found_item.item }} </p> 
+            </div>
+
+            <br>
+            <br>
+
+            <div class="details">
+                <p><strong>Description:</strong><br><span> {{ found_item.description }} </span></p> 
+                <p><strong>Date Found:</strong><br><span> {{ found_item.date }} </span></p>
+                <p><strong>Location:</strong><br><span> {{ found_item.location }} </span></p>
+                <p><strong>Found By:</strong><br><span> {{ found_item.student_id }} </span></p>
+                <p><strong>Contact:</strong><br><span> {{ found_item.contact }} </span></p>
+                <p><strong>Status:</strong><br><span style="border-color: rgb(43, 228, 53);"> {{ found_item.status }} </span></p> 
+            </div>
+            <form method="POST" action="{{ url_for('mark_as_retrieved', found_id=found_id) }}" id="retrieved-form">
+                <button type="button" class="markasretrieved" id="show-modal-btn">REQUEST FOR RETRIEVAL</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('mark_as_retrieved', found_id=found_id) }}" id="retrieved-form">
+                <h2>REQUEST ITEM RETRIEVAL</h2>
+                <h4>Please input your Student ID / Name to request this item</h4>
+
+                <label for="requested_by">Student ID or Name:</label>
+                <input type="text" name="requested_by" id="requested_by" required>
+
+                <p><strong>Are you sure you want to Request for the Retrieval of this Item?</strong></p>
+                <p>NOTE: proceed to Office to process your approval and claim your item</p>
+
+                <div class="modal-buttons">
+                    <button type="button" id="go-back-btn">BACK</button>
+                    <button type="submit" id="confirm-submit-btn">REQUEST</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('found-photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview-image');
+        
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function enlargeImage(img) {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '1000';
+        
+            const largeImg = document.createElement('img');
+            largeImg.src = img.src;
+            largeImg.style.maxWidth = '90%';
+            largeImg.style.maxHeight = '90%';
+            largeImg.style.borderRadius = '8px';
+        
+            overlay.appendChild(largeImg);
+            overlay.addEventListener('click', () => document.body.removeChild(overlay));
+            document.body.appendChild(overlay);
+        }
+    </script>
+
+    <script>
+        const modal = document.getElementById('confirmation-modal');
+
+        document.getElementById('show-modal-btn').addEventListener('click', () => {
+            modal.classList.add('show');
+        });
+
+        document.getElementById('go-back-btn').addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+    </script>
+
+</body>
+</html>

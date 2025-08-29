@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style4.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Found Items</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <div class="search-wrapper">
+            <form class="search-bar" method="GET" action="{{ url_for('recentfound') }}">
+                <i class="fas fa-search"></i>
+                <input type="text" name="query" placeholder="Search Item..." />
+                <div class="custom-dropdown">
+                    <div class="selected-option" id="selectedText">
+                        <span class="arrow">&#9662;</span>
+                    </div>
+                    <div class="dropdown-options" id="dropdownList">
+                        <div data-value="location">Location</div>
+                        <div data-value="date">Date Added</div>
+                    </div>
+                    <input type="hidden" name="filter_by" id="filterByInput" value="item">
+                </div>
+            </form>
+        </div>
+            <p class="search-note">NOTE: if you want to search using Date Added, use YYYY-MM-DD format</p>
+        <div class="logo-usm">
+            <img src="static/images/usmlogo.png" alt="Logo">
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="header-row">
+            <div class="back">
+                <a href="{{ url_for('home') }}">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    <span class="back-text">BACK</span>
+                </a>
+            </div>
+
+            <h1 class="page-title">FOUND ITEMS</h1>
+
+            <div class="unfilter-search">
+                <a href="{{ url_for('recentfound') }}">
+                    <span>Unfilter Search</span>
+                </a>
+            </div>
+        </div>
+
+        {% for item in items %}
+        <div class="item-card">
+            <p><strong>ITEM:</strong> {{ item.item }}</p>
+            <p><strong>LOCATION:</strong> {{ item.location }}</p>
+            <p><strong>DESCRIPTION:</strong> {{ item.description }}</p>
+            <p><strong>DATE:</strong> {{ item.date }}</p>
+            <p><strong>FOUND BY:</strong> {{ item.found_by }}</p>
+            <a href="{{ url_for('view_found_item', found_id=item.id) }}" class="view-link">View Found Item</a>
+        </div>
+        {% else %}
+        <div class="no-items-message">
+            <p>No Item Found</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectedText = document.getElementById('selectedText');
+            const filterByInput = document.getElementById('filterByInput');
+
+            // Set selected text based on server-passed value
+            const currentFilter = "{{ filter_by }}";
+            const readableFilter = {
+                'item': 'Item',
+                'location': 'Location',
+                'date': 'Date Added'
+            };
+
+            selectedText.childNodes[0].nodeValue = "Search by " + (readableFilter[currentFilter] || "Item");
+            filterByInput.value = currentFilter;
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectedText = document.getElementById('selectedText');
+            const dropdownList = document.getElementById('dropdownList');
+            const filterByInput = document.getElementById('filterByInput');
+
+            selectedText.addEventListener('click', function () {
+                dropdownList.classList.toggle('show');
+            });
+
+            dropdownList.querySelectorAll('div').forEach(option => {
+                option.addEventListener('click', function () {
+                    const value = option.getAttribute('data-value');
+                    filterByInput.value = value;
+                    selectedText.childNodes[0].nodeValue = "Search by " + option.textContent;
+                    dropdownList.classList.remove('show');
+                });
+            });
+
+            // Close dropdown on outside click
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.custom-dropdown')) {
+                    dropdownList.classList.remove('show');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
